@@ -93,15 +93,15 @@ const CreateEventAuditorium = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Crear Eventos y Auditorios</h1>
+    <div className="max-w-6xl mx-auto p-8 lg:p-12">
+      <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-12">Crear Eventos y Auditorios</h1>
 
-      <div className="mb-6">
+      <div className="mb-12">
         <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
+          <nav className="-mb-px flex space-x-12">
             <button
               onClick={() => setActiveTab('event')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-3 px-2 border-b-2 font-semibold text-base lg:text-lg transition-colors ${
                 activeTab === 'event'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -111,7 +111,7 @@ const CreateEventAuditorium = () => {
             </button>
             <button
               onClick={() => setActiveTab('auditorium')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-3 px-2 border-b-2 font-semibold text-base lg:text-lg transition-colors ${
                 activeTab === 'auditorium'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -124,14 +124,14 @@ const CreateEventAuditorium = () => {
       </div>
 
       {activeTab === 'event' && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Crear Nuevo Evento</CardTitle>
+        <Card className="hover:shadow-lg transition-shadow duration-200">
+          <CardHeader className="pb-6">
+            <CardTitle className="text-2xl lg:text-3xl">Crear Nuevo Evento</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleEventSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="eventName" className="block text-sm font-medium text-gray-700">
+            <form onSubmit={handleEventSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label htmlFor="eventName" className="block text-base lg:text-lg font-medium text-gray-700">
                   Nombre del Evento
                 </label>
                 <Input
@@ -141,11 +141,12 @@ const CreateEventAuditorium = () => {
                   onChange={(e) => setEventForm({ ...eventForm, name: e.target.value })}
                   required
                   placeholder="Ej: Graduación 2025"
+                  className="h-12 text-base lg:text-lg"
                 />
               </div>
 
-              <div>
-                <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700">
+              <div className="space-y-2">
+                <label htmlFor="eventDate" className="block text-base lg:text-lg font-medium text-gray-700">
                   Fecha del Evento
                 </label>
                 <Input
@@ -155,18 +156,19 @@ const CreateEventAuditorium = () => {
                   onChange={(e) => setEventForm({ ...eventForm, date: e.target.value })}
                   required
                   min={new Date().toISOString().slice(0, 16)}
+                  className="h-12 text-base lg:text-lg"
                 />
               </div>
 
-              <div>
-                <label htmlFor="eventStatus" className="block text-sm font-medium text-gray-700">
+              <div className="space-y-2">
+                <label htmlFor="eventStatus" className="block text-base lg:text-lg font-medium text-gray-700">
                   Estado
                 </label>
                 <select
                   id="eventStatus"
                   value={eventForm.status}
                   onChange={(e) => setEventForm({ ...eventForm, status: e.target.value as any })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base lg:text-lg"
                 >
                   <option value="ACTIVE">Activo</option>
                   <option value="INACTIVE">Inactivo</option>
@@ -174,7 +176,7 @@ const CreateEventAuditorium = () => {
                 </select>
               </div>
 
-              <Button type="submit" disabled={isCreatingEvent}>
+              <Button type="submit" disabled={isCreatingEvent} className="h-12 px-8 text-base lg:text-lg font-semibold">
                 {isCreatingEvent ? 'Creando...' : 'Crear Evento'}
               </Button>
             </form>
@@ -202,14 +204,14 @@ const CreateEventAuditorium = () => {
       )}
 
       {activeTab === 'auditorium' && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Crear Nuevo Auditorio</CardTitle>
+        <Card className="hover:shadow-lg transition-shadow duration-200">
+          <CardHeader className="pb-6">
+            <CardTitle className="text-2xl lg:text-3xl">Crear Nuevo Auditorio</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleAuditoriumSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="eventSelect" className="block text-sm font-medium text-gray-700">
+            <form onSubmit={handleAuditoriumSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label htmlFor="eventSelect" className="block text-base lg:text-lg font-medium text-gray-700">
                   Evento
                 </label>
                 <select
@@ -217,7 +219,7 @@ const CreateEventAuditorium = () => {
                   value={auditoriumForm.event_id}
                   onChange={(e) => setAuditoriumForm({ ...auditoriumForm, event_id: parseInt(e.target.value) })}
                   required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base lg:text-lg"
                 >
                   <option value={0}>Seleccionar evento...</option>
                   {events.map((event) => (
@@ -228,8 +230,8 @@ const CreateEventAuditorium = () => {
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="auditoriumName" className="block text-sm font-medium text-gray-700">
+              <div className="space-y-2">
+                <label htmlFor="auditoriumName" className="block text-base lg:text-lg font-medium text-gray-700">
                   Nombre del Auditorio
                 </label>
                 <Input
@@ -239,11 +241,12 @@ const CreateEventAuditorium = () => {
                   onChange={(e) => setAuditoriumForm({ ...auditoriumForm, name: e.target.value })}
                   required
                   placeholder="Ej: Auditorio Principal"
+                  className="h-12 text-base lg:text-lg"
                 />
               </div>
 
-              <div>
-                <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
+              <div className="space-y-2">
+                <label htmlFor="capacity" className="block text-base lg:text-lg font-medium text-gray-700">
                   Capacidad
                 </label>
                 <Input
@@ -255,10 +258,11 @@ const CreateEventAuditorium = () => {
                   onChange={(e) => setAuditoriumForm({ ...auditoriumForm, capacity: parseInt(e.target.value) })}
                   required
                   placeholder="Ej: 500"
+                  className="h-12 text-base lg:text-lg"
                 />
               </div>
 
-              <Button type="submit" disabled={isCreatingAuditorium}>
+              <Button type="submit" disabled={isCreatingAuditorium} className="h-12 px-8 text-base lg:text-lg font-semibold">
                 {isCreatingAuditorium ? 'Creando...' : 'Crear Auditorio'}
               </Button>
             </form>

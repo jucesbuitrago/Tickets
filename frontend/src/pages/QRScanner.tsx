@@ -233,15 +233,15 @@ const QRScanner: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-md mx-auto space-y-4">
-        <Card className="p-6">
-          <h1 className="text-2xl font-bold text-center mb-4">Escáner QR</h1>
+    <div className="min-h-screen bg-gray-50 p-6 lg:p-12">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <Card className="p-8 lg:p-12">
+          <h1 className="text-3xl lg:text-4xl font-bold text-center mb-8">Escáner QR</h1>
 
-          <div className="relative">
+          <div className="relative mb-8">
             <video
               ref={videoRef}
-              className="w-full rounded-lg border"
+              className="w-full max-w-lg mx-auto rounded-xl border-2 border-gray-200 shadow-lg"
               autoPlay
               playsInline
               muted
@@ -249,47 +249,47 @@ const QRScanner: React.FC = () => {
             <canvas ref={canvasRef} className="hidden" />
           </div>
 
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-4 justify-center mb-8">
             {!isScanning ? (
-              <Button onClick={startCamera} className="flex-1">
+              <Button onClick={startCamera} className="px-8 py-3 text-lg font-semibold">
                 Iniciar Escaneo
               </Button>
             ) : (
-              <Button onClick={stopCamera} variant="outline" className="flex-1">
+              <Button onClick={stopCamera} variant="outline" className="px-8 py-3 text-lg">
                 Detener
               </Button>
             )}
           </div>
 
-          <div className="mt-4 text-sm text-center">
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
+          <div className="text-center mb-6">
+            <div className={`inline-flex items-center gap-3 px-4 py-2 rounded-full text-base font-medium ${
               isOnline ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
             }`}>
-              <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500'}`} />
+              <div className={`w-3 h-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500'}`} />
               {isOnline ? 'En línea' : 'Sin conexión'}
             </div>
           </div>
 
           {queue.length > 0 && (
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
+            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-base text-yellow-800 font-medium">
                 {queue.length} escaneo{queue.length > 1 ? 's' : ''} pendiente{queue.length > 1 ? 's' : ''} de sincronización
               </p>
               {isProcessing && (
-                <p className="text-xs text-yellow-600 mt-1">Procesando...</p>
+                <p className="text-sm text-yellow-600 mt-2">Procesando...</p>
               )}
             </div>
           )}
         </Card>
 
         {lastResult && (
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold mb-2">Resultado del Escaneo</h2>
-            <div className={`text-center text-xl font-bold ${getStatusColor(lastResult.status)}`}>
+          <Card className="p-8 lg:p-12">
+            <h2 className="text-2xl lg:text-3xl font-semibold mb-6 text-center">Resultado del Escaneo</h2>
+            <div className={`text-center text-2xl lg:text-3xl font-bold mb-4 ${getStatusColor(lastResult.status)}`}>
               {getStatusMessage(lastResult.status)}
             </div>
             {lastResult.reason && (
-              <p className="text-center text-gray-600 mt-2">{lastResult.reason}</p>
+              <p className="text-center text-gray-600 text-lg leading-relaxed">{lastResult.reason}</p>
             )}
           </Card>
         )}

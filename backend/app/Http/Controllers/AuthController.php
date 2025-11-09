@@ -15,33 +15,24 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        dd($request->all());
 
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ]);
-
-        $tempPassword = Str::random(10);
-        $expireAt = Carbon::now()->addHours(24);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($tempPassword),
+            'password' => Hash::make($request->password),
             'role' => 'GRADUANDO',
-            'first_login' => true,
-            'password_temp_expire_at' => $expireAt,
+            'first_login' => false,
         ]);
 
         $user->assignRole('GRADUANDO');
 
-        // Send email with temporary password
-        Mail::raw("Your temporary password is: {$tempPassword}. It expires in 24 hours.", function ($message) use ($user) {
-            $message->to($user->email)->subject('Your Temporary Password');
-        });
-
-        return response()->json(['message' => 'User registered successfully. Check your email for temporary password.'], 201);
+        return response()->json(['message' => 'User registered successfully.'], 201);
     }
 
     public function login(Request $request)

@@ -129,18 +129,18 @@ const TicketsList = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Lista de Tickets</h1>
-        <Button onClick={loadTickets}>Actualizar</Button>
+    <div className="max-w-7xl mx-auto p-8 lg:p-12">
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">Lista de Tickets</h1>
+        <Button onClick={loadTickets} className="px-6 py-3 text-base lg:text-lg">Actualizar</Button>
       </div>
 
       {/* Filters */}
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+      <Card className="mb-12 hover:shadow-lg transition-shadow duration-200">
+        <CardContent className="p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <label htmlFor="search" className="block text-base lg:text-lg font-medium text-gray-700">
                 Buscar por ID de ticket o graduando
               </label>
               <Input
@@ -149,18 +149,19 @@ const TicketsList = () => {
                 placeholder="Buscar..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-12 text-base lg:text-lg"
               />
             </div>
 
-            <div>
-              <label htmlFor="statusFilter" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="space-y-2">
+              <label htmlFor="statusFilter" className="block text-base lg:text-lg font-medium text-gray-700">
                 Filtrar por estado
               </label>
               <select
                 id="statusFilter"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base lg:text-lg"
               >
                 <option value="ALL">Todos</option>
                 <option value="ACTIVE">Activos</option>
@@ -174,9 +175,9 @@ const TicketsList = () => {
       </Card>
 
       {/* Tickets Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Tickets ({filteredTickets.length})</CardTitle>
+      <Card className="hover:shadow-lg transition-shadow duration-200">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl lg:text-3xl">Tickets ({filteredTickets.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {filteredTickets.length === 0 ? (

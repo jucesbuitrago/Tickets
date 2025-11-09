@@ -25,7 +25,7 @@ const Login: React.FC = () => {
     setError('');
     try {
       const response = await post('/login', data);
-      const { token, user, requires_password_change } = response.data.data as { token: string; user: any; requires_password_change: boolean };
+      const { token, user, requires_password_change } = (response.data as unknown) as { token: string; user: any; requires_password_change: boolean };
 
       login(user, token);
 
@@ -55,37 +55,41 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Enter your credentials to access your account</CardDescription>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-8 py-12">
+      <Card className="w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
+        <CardHeader className="pb-8">
+          <CardTitle className="text-3xl lg:text-4xl">Login</CardTitle>
+          <CardDescription className="text-base lg:text-lg">Enter your credentials to access your account</CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
+        <CardContent className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 lg:text-base">Email</label>
               <Input
                 type="email"
-                placeholder="Email"
+                placeholder="Enter your email"
+                className="h-12 text-base lg:text-lg"
                 {...register('email', { required: 'Email is required' })}
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+              {errors.email && <p className="text-red-500 text-sm lg:text-base">{errors.email.message}</p>}
             </div>
-            <div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 lg:text-base">Password</label>
               <Input
                 type="password"
-                placeholder="Password"
+                placeholder="Enter your password"
+                className="h-12 text-base lg:text-lg"
                 {...register('password', { required: 'Password is required' })}
               />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+              {errors.password && <p className="text-red-500 text-sm lg:text-base">{errors.password.message}</p>}
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" disabled={loading} className="w-full">
+            {error && <p className="text-red-500 text-sm lg:text-base text-center">{error}</p>}
+            <Button type="submit" disabled={loading} className="w-full h-12 text-base lg:text-lg font-semibold">
               {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
-          <div className="mt-4 text-center">
-            <Link to="/register" className="text-blue-500 hover:underline">Don't have an account? Register</Link>
+          <div className="pt-4 text-center">
+            <Link to="/register" className="text-blue-500 hover:underline text-sm lg:text-base">Don't have an account? Register</Link>
           </div>
         </CardContent>
       </Card>

@@ -63,12 +63,12 @@ const ImportGraduates = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Importar Graduandos</h1>
+    <div className="max-w-6xl mx-auto p-8 lg:p-12">
+      <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-12">Importar Graduandos</h1>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Subir Archivo Excel</CardTitle>
+      <Card className="hover:shadow-lg transition-shadow duration-200">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl lg:text-3xl">Subir Archivo Excel</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

@@ -128,12 +128,12 @@ const GraduateInvitations = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Mis Invitaciones</h1>
-        <div className="flex gap-2">
-          <Button onClick={loadInvitations}>Actualizar</Button>
-          <Button onClick={() => setShowCreateForm(!showCreateForm)}>
+    <div className="max-w-7xl mx-auto p-8 lg:p-12">
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">Mis Invitaciones</h1>
+        <div className="flex gap-4">
+          <Button onClick={loadInvitations} className="px-6 py-3 text-base lg:text-lg">Actualizar</Button>
+          <Button onClick={() => setShowCreateForm(!showCreateForm)} className="px-6 py-3 text-base lg:text-lg">
             {showCreateForm ? 'Cancelar' : 'Crear Invitación'}
           </Button>
         </div>
@@ -149,14 +149,14 @@ const GraduateInvitations = () => {
 
       {/* Create Invitation Form */}
       {showCreateForm && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Crear Nueva Invitación</CardTitle>
+        <Card className="mb-12 hover:shadow-lg transition-shadow duration-200">
+          <CardHeader className="pb-6">
+            <CardTitle className="text-2xl lg:text-3xl">Crear Nueva Invitación</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="eventId" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label htmlFor="eventId" className="block text-base lg:text-lg font-medium text-gray-700">
                   ID del Evento
                 </label>
                 <Input
@@ -165,13 +165,14 @@ const GraduateInvitations = () => {
                   placeholder="Ingresa el ID del evento"
                   value={eventId}
                   onChange={(e) => setEventId(e.target.value)}
+                  className="h-12 text-base lg:text-lg"
                 />
               </div>
               <div className="flex items-end">
                 <Button
                   onClick={handleCreateInvitation}
                   disabled={creatingInvitation}
-                  className="w-full"
+                  className="w-full h-12 text-base lg:text-lg font-semibold"
                 >
                   {creatingInvitation ? 'Creando...' : 'Crear Invitación'}
                 </Button>
@@ -182,9 +183,9 @@ const GraduateInvitations = () => {
       )}
 
       {/* Invitations List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Invitaciones ({invitations.length})</CardTitle>
+      <Card className="hover:shadow-lg transition-shadow duration-200">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl lg:text-3xl">Invitaciones ({invitations.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {invitations.length === 0 ? (

@@ -25,7 +25,7 @@ const GraduateProfile = () => {
       const response = await get<GraduateProfileResponse>('/graduate/me');
       const profileData = response.data.data;
       if (profileData) {
-        setProfile(profileData);
+        setProfile(profileData as any);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al cargar el perfil');
@@ -81,53 +81,53 @@ const GraduateProfile = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Mi Perfil de Graduando</h1>
-        <Button onClick={loadProfile}>Actualizar</Button>
+    <div className="max-w-6xl mx-auto p-8 lg:p-12">
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">Mi Perfil de Graduando</h1>
+        <Button onClick={loadProfile} className="px-6 py-3 text-base lg:text-lg">Actualizar</Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Cupos Permitidos */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Cupos Permitidos</CardTitle>
+        <Card className="hover:shadow-lg transition-shadow duration-200">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl lg:text-2xl">Cupos Permitidos</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-blue-600">
+            <div className="text-4xl lg:text-5xl font-bold text-blue-600 mb-3">
               {profile.cupos_permitidos}
             </div>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-base text-gray-600 leading-relaxed">
               Total de cupos asignados
             </p>
           </CardContent>
         </Card>
 
         {/* Cupos Usados */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Cupos Usados</CardTitle>
+        <Card className="hover:shadow-lg transition-shadow duration-200">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl lg:text-2xl">Cupos Usados</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-orange-600">
+            <div className="text-4xl lg:text-5xl font-bold text-orange-600 mb-3">
               {profile.cupos_usados}
             </div>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-base text-gray-600 leading-relaxed">
               Invitaciones creadas
             </p>
           </CardContent>
         </Card>
 
         {/* Cupos Disponibles */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Cupos Disponibles</CardTitle>
+        <Card className="hover:shadow-lg transition-shadow duration-200">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl lg:text-2xl">Cupos Disponibles</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-600">
+            <div className="text-4xl lg:text-5xl font-bold text-green-600 mb-3">
               {profile.cupos_disponibles}
             </div>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-base text-gray-600 leading-relaxed">
               Pueden ser utilizados
             </p>
           </CardContent>
@@ -135,23 +135,23 @@ const GraduateProfile = () => {
       </div>
 
       {/* Información adicional */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Información del Perfil</CardTitle>
+      <Card className="mt-12 hover:shadow-lg transition-shadow duration-200">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl lg:text-3xl">Información del Perfil</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <label className="block text-base lg:text-lg font-medium text-gray-700">
                 ID de Graduando
               </label>
-              <p className="mt-1 text-sm text-gray-900">{profile.id}</p>
+              <p className="text-lg lg:text-xl text-gray-900 font-semibold">{profile.id}</p>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
+            <div className="space-y-2">
+              <label className="block text-base lg:text-lg font-medium text-gray-700">
                 ID de Usuario
               </label>
-              <p className="mt-1 text-sm text-gray-900">{profile.user_id}</p>
+              <p className="text-lg lg:text-xl text-gray-900 font-semibold">{profile.user_id}</p>
             </div>
           </div>
         </CardContent>

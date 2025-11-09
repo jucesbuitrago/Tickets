@@ -17,8 +17,6 @@ export const useApi = () => {
     },
   });
 
-  console.log('API Base URL:', api.defaults.baseURL);
-
   // Add token to requests if available
   api.interceptors.request.use((config) => {
     if (token) {

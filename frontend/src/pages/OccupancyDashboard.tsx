@@ -77,16 +77,16 @@ const OccupancyDashboard = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard de Aforo</h1>
-        <div className="flex items-center gap-4">
+    <div className="max-w-7xl mx-auto p-8 lg:p-12">
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">Dashboard de Aforo</h1>
+        <div className="flex items-center gap-6">
           {lastUpdated && (
-            <span className="text-sm text-gray-500">
+            <span className="text-base text-gray-500">
               Última actualización: {lastUpdated.toLocaleTimeString()}
             </span>
           )}
-          <Button onClick={loadDashboardData} disabled={isLoading}>
+          <Button onClick={loadDashboardData} disabled={isLoading} className="px-6 py-3 text-base lg:text-lg">
             {isLoading ? 'Actualizando...' : 'Actualizar'}
           </Button>
         </div>

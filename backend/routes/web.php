@@ -22,8 +22,8 @@ Route::get('/login', function () {
 })->name('login');
 
 // API routes (temporary for debugging)
-Route::post('/api/register', [App\Http\Controllers\AuthController::class, 'register']);
-Route::post('/api/login', [App\Http\Controllers\AuthController::class, 'login']);
+Route::post('/api/register', [App\Http\Controllers\AuthController::class, 'register'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+Route::post('/api/login', [App\Http\Controllers\AuthController::class, 'login'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 // Test route
 Route::get('/test', function () {
