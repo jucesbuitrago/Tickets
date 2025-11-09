@@ -18,8 +18,10 @@ import GraduateProfile from './pages/GraduateProfile';
 import GraduateInvitations from './pages/GraduateInvitations';
 import GraduateTickets from './pages/GraduateTickets';
 import QRScanner from './pages/QRScanner';
-
-const GraduateDashboard = () => <div className="p-8"><h1>Graduate Dashboard</h1></div>;
+import HomeGraduado from './pages/HomeGraduado';
+import PerfilGraduado from './pages/PerfilGraduado';
+import TicketView from './pages/TicketView';
+import FormInvitado from './pages/FormInvitado';
 
 function App() {
   const { isAuthenticated, user } = useAuth();
@@ -104,7 +106,7 @@ function App() {
           path="/graduate"
           element={
             <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <GraduateDashboard />
+              <HomeGraduado />
             </ProtectedRoute>
           }
         />
@@ -112,7 +114,7 @@ function App() {
           path="/graduate/profile"
           element={
             <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <GraduateProfile />
+              <PerfilGraduado />
             </ProtectedRoute>
           }
         />
@@ -128,7 +130,15 @@ function App() {
           path="/graduate/tickets"
           element={
             <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <GraduateTickets />
+              <TicketView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/graduate/add-guest"
+          element={
+            <ProtectedRoute allowedRoles={['GRADUANDO']}>
+              <FormInvitado />
             </ProtectedRoute>
           }
         />
