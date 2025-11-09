@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import ProtectedRoute from './components/ProtectedRoute';
+import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ChangePassword from './pages/ChangePassword';
@@ -10,8 +11,13 @@ import CreateEventAuditorium from './pages/CreateEventAuditorium';
 import OccupancyDashboard from './pages/OccupancyDashboard';
 import TicketsList from './pages/TicketsList';
 
-// Placeholder components for role-based dashboards
-const StaffDashboard = () => <div className="p-8"><h1>Staff Dashboard</h1></div>;
+// Admin pages
+import AdminLogin from './pages/AdminLogin';
+import AdminLanding from './pages/AdminLanding';
+import CargueAuditorios from './pages/CargueAuditorios';
+import CargueGraduados from './pages/CargueGraduados';
+import AdminEstadisticas from './pages/AdminEstadisticas';
+import AdminAsignarAsientos from './pages/AdminAsignarAsientos';
 
 // Graduate components
 import GraduateInvitations from './pages/GraduateInvitations';
@@ -22,6 +28,9 @@ import TicketView from './pages/TicketView';
 import FormInvitado from './pages/FormInvitado';
 import GraduateLayout from './components/GraduateLayout';
 
+// Placeholder components for role-based dashboards
+const StaffDashboard = () => <div className="p-8"><h1>Staff Dashboard</h1></div>;
+
 function App() {
   const { isAuthenticated, user } = useAuth();
 
@@ -29,8 +38,12 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Routes>
         {/* Public routes */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* Admin public routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
 
         {/* Protected routes */}
         <Route
@@ -47,7 +60,39 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
-              <AdminDashboard />
+              <AdminLanding />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/cargue-auditorios"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <CargueAuditorios />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/cargue-graduados"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <CargueGraduados />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/estadisticas"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AdminEstadisticas />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/asignar-asientos"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AdminAsignarAsientos />
             </ProtectedRoute>
           }
         />
@@ -118,7 +163,7 @@ function App() {
 
         {/* Default redirect based on authentication and role */}
         <Route
-          path="/"
+          path="/dashboard"
           element={
             isAuthenticated && user ? (
               (() => {

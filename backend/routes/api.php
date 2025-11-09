@@ -41,6 +41,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/admin/auditoriums', [App\Http\Controllers\AdminController::class, 'createAuditorium']);
         Route::post('/admin/tickets/{ticketId}/revoke', [App\Http\Controllers\AdminController::class, 'revokeTicket']);
         Route::get('/admin/dashboard/aforo', [App\Http\Controllers\AdminController::class, 'getDashboardAforo']);
+
+        // New admin routes for the module
+        Route::get('/admin/auditoriums', [App\Http\Controllers\AdminController::class, 'getAuditoriums']);
+        Route::post('/admin/auditoriums/import', [App\Http\Controllers\AdminController::class, 'importAuditoriums']);
+        Route::delete('/admin/auditoriums/{id}', [App\Http\Controllers\AdminController::class, 'deleteAuditorium']);
+
+        Route::get('/admin/graduates', [App\Http\Controllers\AdminController::class, 'getGraduates']);
+        Route::post('/admin/graduates/import', [App\Http\Controllers\AdminController::class, 'importGraduates']);
+        Route::delete('/admin/graduates/{id}', [App\Http\Controllers\AdminController::class, 'deleteGraduate']);
     });
 
     Route::middleware('role:ADMIN,STAFF')->group(function () {
