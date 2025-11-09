@@ -14,14 +14,13 @@ import TicketsList from './pages/TicketsList';
 const StaffDashboard = () => <div className="p-8"><h1>Staff Dashboard</h1></div>;
 
 // Graduate components
-import GraduateProfile from './pages/GraduateProfile';
 import GraduateInvitations from './pages/GraduateInvitations';
-import GraduateTickets from './pages/GraduateTickets';
 import QRScanner from './pages/QRScanner';
-import HomeGraduado from './pages/HomeGraduado';
+import GraduateHomePage from './pages/GraduateHomePage';
 import PerfilGraduado from './pages/PerfilGraduado';
 import TicketView from './pages/TicketView';
 import FormInvitado from './pages/FormInvitado';
+import GraduateLayout from './components/GraduateLayout';
 
 function App() {
   const { isAuthenticated, user } = useAuth();
@@ -106,42 +105,16 @@ function App() {
           path="/graduate"
           element={
             <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <HomeGraduado />
+              <GraduateLayout />
             </ProtectedRoute>
           }
-        />
-        <Route
-          path="/graduate/profile"
-          element={
-            <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <PerfilGraduado />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/graduate/invitations"
-          element={
-            <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <GraduateInvitations />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/graduate/tickets"
-          element={
-            <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <TicketView />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/graduate/add-guest"
-          element={
-            <ProtectedRoute allowedRoles={['GRADUANDO']}>
-              <FormInvitado />
-            </ProtectedRoute>
-          }
-        />
+        >
+          <Route index element={<GraduateHomePage />} />
+          <Route path="profile" element={<PerfilGraduado />} />
+          <Route path="invitations" element={<GraduateInvitations />} />
+          <Route path="tickets" element={<TicketView />} />
+          <Route path="add-guest" element={<FormInvitado />} />
+        </Route>
 
         {/* Default redirect based on authentication and role */}
         <Route

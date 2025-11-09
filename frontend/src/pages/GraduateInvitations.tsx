@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useApi } from '../hooks/useApi';
@@ -11,7 +10,7 @@ import type {
   DeleteInvitationResponse
 } from '../types/graduate';
 
-const GraduateInvitations = () => {
+export default function GraduateInvitations() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -128,35 +127,31 @@ const GraduateInvitations = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-8 lg:p-12">
-      <div className="flex justify-between items-center mb-12">
-        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">Mis Invitaciones</h1>
+    <div className="grid grid-cols-12 gap-8">
+      <div className="col-span-12 flex justify-between items-center">
+        <h1 className="text-4xl font-semibold text-slate-900">Mis Invitaciones</h1>
         <div className="flex gap-4">
-          <Button onClick={loadInvitations} className="px-6 py-3 text-base lg:text-lg">Actualizar</Button>
-          <Button onClick={() => setShowCreateForm(!showCreateForm)} className="px-6 py-3 text-base lg:text-lg">
+          <Button onClick={loadInvitations}>Actualizar</Button>
+          <Button onClick={() => setShowCreateForm(!showCreateForm)}>
             {showCreateForm ? 'Cancelar' : 'Crear Invitación'}
           </Button>
         </div>
       </div>
 
       {error && (
-        <Card className="mb-6">
-          <CardContent className="p-4">
-            <p className="text-red-600">{error}</p>
-          </CardContent>
-        </Card>
+        <div className="col-span-12 rounded-2xl bg-red-50 border border-red-200 p-4">
+          <p className="text-red-800">{error}</p>
+        </div>
       )}
 
       {/* Create Invitation Form */}
       {showCreateForm && (
-        <Card className="mb-12 hover:shadow-lg transition-shadow duration-200">
-          <CardHeader className="pb-6">
-            <CardTitle className="text-2xl lg:text-3xl">Crear Nueva Invitación</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="col-span-12">
+          <div className="rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm p-6">
+            <h2 className="text-xl font-semibold text-slate-900 mb-6">Crear Nueva Invitación</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label htmlFor="eventId" className="block text-base lg:text-lg font-medium text-gray-700">
+                <label htmlFor="eventId" className="block text-sm font-medium text-slate-700">
                   ID del Evento
                 </label>
                 <Input
@@ -165,29 +160,27 @@ const GraduateInvitations = () => {
                   placeholder="Ingresa el ID del evento"
                   value={eventId}
                   onChange={(e) => setEventId(e.target.value)}
-                  className="h-12 text-base lg:text-lg"
+                  className="h-12"
                 />
               </div>
               <div className="flex items-end">
                 <Button
                   onClick={handleCreateInvitation}
                   disabled={creatingInvitation}
-                  className="w-full h-12 text-base lg:text-lg font-semibold"
+                  className="w-full h-12 font-semibold"
                 >
                   {creatingInvitation ? 'Creando...' : 'Crear Invitación'}
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Invitations List */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-2xl lg:text-3xl">Invitaciones ({invitations.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="col-span-12">
+        <div className="rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm p-6">
+          <h2 className="text-xl font-semibold text-slate-900 mb-6">Invitaciones ({invitations.length})</h2>
           {invitations.length === 0 ? (
             <p className="text-center text-gray-500 py-8">
               No tienes invitaciones creadas.
@@ -258,10 +251,8 @@ const GraduateInvitations = () => {
               </table>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default GraduateInvitations;
+}

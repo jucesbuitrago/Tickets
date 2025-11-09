@@ -1,5 +1,6 @@
 import React from 'react';
 import { Users, Plus } from 'lucide-react';
+import { Button } from './ui/Button';
 
 interface EmptyStateProps {
   title: string;
@@ -24,13 +25,10 @@ export default function EmptyState({
       <h3 className="text-lg font-semibold text-slate-900 mb-2">{title}</h3>
       <p className="text-slate-600 mb-6 max-w-sm mx-auto">{description}</p>
       {actionLabel && onAction && (
-        <button
-          onClick={onAction}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#D71920] text-white rounded-2xl hover:bg-[#b9151b] transition-colors"
-        >
+        <Button onClick={onAction}>
           <Plus size={16} />
           {actionLabel}
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -9,24 +9,30 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="mx-auto max-w-7xl px-8 lg:px-6 md:px-4 sm:px-4">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Sidebar (hidden en <lg) */}
-          <aside className="hidden lg:block col-span-3 xl:col-span-3 sticky top-0 h-screen bg-white border-r rounded-r-2xl p-4">
-            <SidebarGrad />
-          </aside>
+    <div className="min-h-dvh w-dvw bg-slate-50 text-slate-900">
+      {/* Sidebar fija (desktop) */}
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-72 bg-white border-r">
+        <SidebarGrad />
+      </aside>
 
-          {/* Main */}
-          <main className="col-span-12 lg:col-span-9 py-6">
-            <TopbarUser />
-            {children}
-          </main>
+      {/* Contenido desplazado por la sidebar */}
+      <main className="min-h-dvh w-full lg:pl-72">
+        {/* Topbar pegajoso */}
+        <header className="sticky top-0 z-10 bg-slate-50/80 backdrop-blur px-6 lg:px-10 py-5">
+          <div className="mx-auto max-w-screen-2xl flex items-center justify-between">
+            <h1 className="text-4xl font-semibold">Hola, Paula</h1>
+            {/* avatar / toggles */}
+          </div>
+        </header>
+
+        {/* Zona de páginas */}
+        <div className="px-6 lg:px-10 py-8">
+          <div className="mx-auto max-w-screen-2xl">{children}</div>
         </div>
-      </div>
+      </main>
 
-      {/* Bottom bar solo en mobile */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t">
+      {/* Bottom bar en mobile */}
+      <nav className="lg:hidden fixed inset-x-0 bottom-0 bg-white border-t">
         <BottomBarGrad />
       </nav>
     </div>

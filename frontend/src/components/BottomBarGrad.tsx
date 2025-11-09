@@ -1,11 +1,9 @@
 import React from 'react';
-import { Home, Bookmark, Ticket, Bell, User } from 'lucide-react';
+import { Home, Ticket, User } from 'lucide-react';
 
 const menuItems = [
   { icon: Home, label: 'Home', href: '/graduate' },
-  { icon: Bookmark, label: 'Guardados', href: '/graduate/saved' },
   { icon: Ticket, label: 'Tickets', href: '/graduate/tickets' },
-  { icon: Bell, label: 'Notificaciones', href: '/graduate/notifications' },
   { icon: User, label: 'Perfil', href: '/graduate/profile' },
 ];
 
