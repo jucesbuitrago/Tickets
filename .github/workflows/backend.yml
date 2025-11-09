@@ -1,0 +1,231 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths: [ 'backend/**' ]
+  pull_request:
+    branches: [ main, develop ]
+    paths: [ 'backend/**' ]
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_mysql
+      - name: Install dependencies
+        working-directory: backend
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Run PHPStan
+        working-directory: backend
+        run: vendor/bin/phpstan analyse --error-format=github
+      - name: Run PHPMD (McCabe Complexity)
+        working-directory: backend
+        run: vendor/bin/phpmd app text phpmd.xml --reportfile=phpmd-report.xml || true
+      - name: Run PHPCPD (Code Duplication)
+        working-directory: backend
+        run: vendor/bin/phpcpd --config=phpcpd.xml app --log-pmd=phpcpd-report.xml || true
+      - name: Run PHPLoc (LCOM and Maintainability Index)
+        working-directory: backend
+        run: vendor/bin/phploc --config=phploc.xml --log-xml=phploc-report.xml app || true
+      - name: Check Code Quality Thresholds
+        working-directory: backend
+        run: |
+          # Check PHPMD violations (McCabe complexity > 10)
+          PHPMD_VIOLATIONS=$(grep -c "<violation" phpmd-report.xml 2>/dev/null || echo "0")
+          if [ "$PHPMD_VIOLATIONS" -gt 0 ]; then
+            echo "❌ PHPMD violations found: $PHPMD_VIOLATIONS"
+            echo "::error::PHPMD violations exceed threshold (0 allowed)"
+            exit 1
+          fi
+
+          # Check PHPCPD duplications (no duplications allowed)
+          PHPCPD_DUPLICATIONS=$(grep -c "<duplication" phpcpd-report.xml 2>/dev/null || echo "0")
+          if [ "$PHPCPD_DUPLICATIONS" -gt 0 ]; then
+            echo "❌ Code duplications found: $PHPCPD_DUPLICATIONS"
+            echo "::error::Code duplications exceed threshold (0 allowed)"
+            exit 1
+          fi
+
+          # Check PHPLoc metrics (Maintainability Index < 85, LCOM > 0.8)
+          if [ -f phploc-report.xml ]; then
+            MAINTAINABILITY_INDEX=$(grep -oP '(?<=maintainability-index>)[^<]+' phploc-report.xml | head -1)
+            LCOM=$(grep -oP '(?<=lack-of-cohesion-in-methods>)[^<]+' phploc-report.xml | head -1)
+
+            if [ ! -z "$MAINTAINABILITY_INDEX" ] && (( $(echo "$MAINTAINABILITY_INDEX < 85" | bc -l) )); then
+              echo "❌ Maintainability Index too low: $MAINTAINABILITY_INDEX (threshold: 85)"
+              echo "::error::Maintainability Index below threshold (85 required)"
+              exit 1
+            fi
+
+            if [ ! -z "$LCOM" ] && (( $(echo "$LCOM > 0.8" | bc -l) )); then
+              echo "❌ LCOM too high: $LCOM (threshold: 0.8 max)"
+              echo "::error::LCOM exceeds threshold (0.8 max)"
+              exit 1
+            fi
+          fi
+
+          echo "✅ All code quality thresholds passed"
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_mysql
+      - name: Install dependencies
+        working-directory: backend
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Run PHP CS Fixer
+        working-directory: backend
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+      - name: Run PHPStan
+        working-directory: backend
+        run: vendor/bin/phpstan analyse
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_mysql
+      - name: Install dependencies
+        working-directory: backend
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Copy environment file
+        working-directory: backend
+        run: cp .env.example .env
+      - name: Generate application key
+        working-directory: backend
+        run: php artisan key:generate
+      - name: Run migrations
+        working-directory: backend
+        run: php artisan migrate --force
+      - name: Run PHPUnit with coverage
+        working-directory: backend
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: Check Code Coverage Threshold
+        working-directory: backend
+        run: |
+          COVERAGE=$(grep -oP '(?<=<coverage generated=)[^>]+' coverage.xml | grep -oP '(?<=lines-covered=")[^"]+' | head -1)
+          TOTAL_LINES=$(grep -oP '(?<=<coverage generated=)[^>]+' coverage.xml | grep -oP '(?<=lines-valid=")[^"]+' | head -1)
+
+          if [ ! -z "$COVERAGE" ] && [ ! -z "$TOTAL_LINES" ]; then
+            COVERAGE_PERCENT=$((COVERAGE * 100 / TOTAL_LINES))
+            if [ "$COVERAGE_PERCENT" -lt 80 ]; then
+              echo "❌ Code coverage too low: $COVERAGE_PERCENT% (threshold: 80%)"
+              echo "::error::Code coverage below threshold (80% required)"
+              exit 1
+            fi
+            echo "✅ Code coverage: $COVERAGE_PERCENT%"
+          else
+            echo "⚠️ Could not determine coverage percentage"
+          fi
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: backend/coverage.xml
+          flags: backend
+          name: backend-coverage
+
+  quality:
+    runs-on: ubuntu-latest
+    needs: [quality-check, lint, test]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_mysql
+      - name: Install dependencies
+        working-directory: backend
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Run PHPMD (McCabe Complexity)
+        working-directory: backend
+        run: vendor/bin/phpmd app text phpmd.xml --reportfile=phpmd-report.xml || true
+      - name: Run PHPCPD (Code Duplication)
+        working-directory: backend
+        run: vendor/bin/phpcpd --config=phpcpd.xml app --log-pmd=phpcpd-report.xml || true
+      - name: Run PHPLoc (LCOM and Maintainability Index)
+        working-directory: backend
+        run: vendor/bin/phploc --config=phploc.xml --log-xml=phploc-report.xml app || true
+      - name: Check Code Quality Thresholds
+        working-directory: backend
+        run: |
+          # Check PHPMD violations (McCabe complexity > 10)
+          PHPMD_VIOLATIONS=$(grep -c "<violation" phpmd-report.xml 2>/dev/null || echo "0")
+          if [ "$PHPMD_VIOLATIONS" -gt 0 ]; then
+            echo "❌ PHPMD violations found: $PHPMD_VIOLATIONS"
+            echo "::error::PHPMD violations exceed threshold (0 allowed)"
+            exit 1
+          fi
+
+          # Check PHPCPD duplications (no duplications allowed)
+          PHPCPD_DUPLICATIONS=$(grep -c "<duplication" phpcpd-report.xml 2>/dev/null || echo "0")
+          if [ "$PHPCPD_DUPLICATIONS" -gt 0 ]; then
+            echo "❌ Code duplications found: $PHPCPD_DUPLICATIONS"
+            echo "::error::Code duplications exceed threshold (0 allowed)"
+            exit 1
+          fi
+
+          # Check PHPLoc metrics (Maintainability Index < 85, LCOM > 0.8)
+          if [ -f phploc-report.xml ]; then
+            MAINTAINABILITY_INDEX=$(grep -oP '(?<=maintainability-index>)[^<]+' phploc-report.xml | head -1)
+            LCOM=$(grep -oP '(?<=lack-of-cohesion-in-methods>)[^<]+' phploc-report.xml | head -1)
+
+            if [ ! -z "$MAINTAINABILITY_INDEX" ] && (( $(echo "$MAINTAINABILITY_INDEX < 85" | bc -l) )); then
+              echo "❌ Maintainability Index too low: $MAINTAINABILITY_INDEX (threshold: 85)"
+              echo "::error::Maintainability Index below threshold (85 required)"
+              exit 1
+            fi
+
+            if [ ! -z "$LCOM" ] && (( $(echo "$LCOM > 0.8" | bc -l) )); then
+              echo "❌ LCOM too high: $LCOM (threshold: 0.8 max)"
+              echo "::error::LCOM exceeds threshold (0.8 max)"
+              exit 1
+            fi
+          fi
+
+          echo "✅ All code quality thresholds passed"
+        continue-on-error: false
+      - name: Send Quality Alert on Failure
+        if: failure()
+        run: |
+          echo "🚨 Code Quality Check Failed!"
+          echo "Please review the following metrics:"
+          echo "- McCabe Complexity: Must not exceed 10"
+          echo "- Code Duplication: Must be 0%"
+          echo "- Maintainability Index: Must be >= 85"
+          echo "- LCOM: Must be <= 0.8"
+          echo "- Code Coverage: Must be >= 80%"
+          echo ""
+          echo "Check the CI/CD logs for detailed reports."
+        continue-on-error: true
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          projectBaseDir: backend

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpcpd>
+    <files>
+        <file>app</file>
+    </files>
+    <exclude>
+        <file>vendor</file>
+        <file>tests</file>
+        <file>storage</file>
+        <file>bootstrap</file>
+        <file>database</file>
+        <file>config</file>
+        <file>resources</file>
+        <file>public</file>
+        <file>routes</file>
+    </exclude>
+    <options>
+        <minLines>5</minLines>
+        <minTokens>70</minTokens>
+        <fuzzy>false</fuzzy>
+    </options>
+</phpcpd>

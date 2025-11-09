@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phploc>
+    <directories>
+        <directory>app</directory>
+    </directories>
+    <exclude>
+        <directory>vendor</directory>
+        <directory>tests</directory>
+        <directory>storage</directory>
+        <directory>bootstrap</directory>
+        <directory>database</directory>
+        <directory>config</directory>
+        <directory>resources</directory>
+        <directory>public</directory>
+        <directory>routes</directory>
+    </exclude>
+    <options>
+        <countTests>false</countTests>
+        <suffixes>php</suffixes>
+    </options>
+</phploc>

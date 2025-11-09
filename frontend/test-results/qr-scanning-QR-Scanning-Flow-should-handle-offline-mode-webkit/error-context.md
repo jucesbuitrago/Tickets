@@ -1,0 +1,81 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - heading "Quality Dashboard — Arquitectura Limpia" [level=1] [ref=e3]
+  - paragraph [ref=e4]: Selecciona un tema o usa los formularios para evaluar datos reales.
+  - generic [ref=e6]:
+    - button "U1-T1 — Atributos de calidad" [ref=e7] [cursor=pointer]
+    - button "U1-T2 — Puntos de función" [ref=e8] [cursor=pointer]
+    - button "U3-T5 — Índice de McCabe" [ref=e9] [cursor=pointer]
+  - separator [ref=e10]
+  - heading "U1 — Puntos de Función" [level=2] [ref=e11]
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - strong [ref=e17]: ILF
+        - spinbutton [ref=e18]: "0"
+        - combobox [ref=e19]:
+          - option "Average" [selected]
+          - option "Low"
+          - option "High"
+      - generic [ref=e20]:
+        - strong [ref=e22]: EIF
+        - spinbutton [ref=e23]: "0"
+        - combobox [ref=e24]:
+          - option "Average" [selected]
+          - option "Low"
+          - option "High"
+      - generic [ref=e25]:
+        - strong [ref=e27]: EI
+        - spinbutton [ref=e28]: "0"
+        - combobox [ref=e29]:
+          - option "Average" [selected]
+          - option "Low"
+          - option "High"
+      - generic [ref=e30]:
+        - strong [ref=e32]: EO
+        - spinbutton [ref=e33]: "0"
+        - combobox [ref=e34]:
+          - option "Average" [selected]
+          - option "Low"
+          - option "High"
+      - generic [ref=e35]:
+        - strong [ref=e37]: EQ
+        - spinbutton [ref=e38]: "0"
+        - combobox [ref=e39]:
+          - option "Average" [selected]
+          - option "Low"
+          - option "High"
+    - group [ref=e40]:
+      - 'generic "Opcional: 14 Factores GSC (0..5)" [ref=e41]'
+    - button "Calcular" [ref=e42]
+  - heading "U3 — Analizador de Complejidad" [level=2] [ref=e43]
+  - generic [ref=e44]:
+    - generic [ref=e45]:
+      - generic [ref=e46]: "Lenguaje:"
+      - combobox [ref=e47]:
+        - option "PHP" [selected]
+        - option "JS"
+        - option "Java"
+    - textbox "Pega aquí tu función/código..." [ref=e48]
+    - button "Analizar" [ref=e49]
+  - heading "U5 — Validador de Arquitectura" [level=2] [ref=e50]
+  - generic [ref=e51]:
+    - paragraph [ref=e52]: Agrega dependencias (from → to) y valida contra las reglas de Arquitectura Limpia.
+    - generic [ref=e53]:
+      - combobox [ref=e54]:
+        - option "Domain"
+        - option "Application"
+        - option "Infrastructure"
+        - option "UI" [selected]
+      - generic [ref=e55]: →
+      - combobox [ref=e56]:
+        - option "Domain"
+        - option "Application" [selected]
+        - option "Infrastructure"
+        - option "UI"
+      - button "x" [ref=e57]
+    - button "Agregar dependencia" [ref=e58]
+    - button "Validar" [ref=e59]
+```
