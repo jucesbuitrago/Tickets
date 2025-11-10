@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import InviteCard from '../components/InviteCard';
 import EmptyState from '../components/EmptyState';
 import { Button } from '../components/ui/Button';
@@ -10,6 +11,7 @@ export default function GraduateHomePage() {
   const [imageError, setImageError] = useState(false);
   const { user } = useAuth();
   const { get } = useApi();
+  const navigate = useNavigate();
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,7 +50,7 @@ export default function GraduateHomePage() {
             </div>
           ) : (
             <img
-              src="/storage/images/campus.jpg"
+              src="/storage/app/images/campus.jpg"
               alt="Campus Universidad del Tolima"
               className="w-full h-full object-cover"
               onError={() => setImageError(true)}
@@ -65,7 +67,7 @@ export default function GraduateHomePage() {
               <h2 className="font-semibold">Aún tienes disponible algunos tickets</h2>
               <p className="text-slate-600">Puedes agregar a un máximo de 3 personas.</p>
             </div>
-            <Button>Agregar invitado</Button>
+            <Button onClick={() => navigate('/graduate/add-guest')}>Agregar invitado</Button>
           </div>
         </div>
       </section>
@@ -114,7 +116,7 @@ export default function GraduateHomePage() {
             title="No tienes invitados aún"
             description="Agrega a tus primeros invitados para el evento."
             actionLabel="Agregar invitado"
-            onAction={() => console.log('Agregar invitado')}
+            onAction={() => navigate('/graduate/add-guest')}
           />
         )}
       </section>

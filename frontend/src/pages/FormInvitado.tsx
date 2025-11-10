@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { useApi } from '../hooks/useApi';
 
 export default function FormInvitado() {
   const { post } = useApi();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -27,6 +29,8 @@ export default function FormInvitado() {
       const response = await post('/invitations', formData);
       console.log('Invitation created:', response.data);
       setToastMessage('Invitado agregado exitosamente');
+      // Navigate to tickets page to show the QR
+      navigate('/graduate/tickets');
       // Reset form on success
       setFormData({
         firstName: '',
@@ -69,7 +73,7 @@ export default function FormInvitado() {
           <p className="text-green-800">{toastMessage}</p>
         </div>
       )}
-      <form className="col-span-12 xl:col-span-7 lg:col-span-12 rounded-2xl bg-white ring-1 ring-slate-200 p-6">
+      <form className="col-span-12 lg:col-span-7 rounded-2xl bg-white ring-1 ring-slate-200 p-6">
         <h2 className="text-xl font-semibold text-slate-900 mb-6">Información del Invitado</h2>
 
         <div className="space-y-4">
@@ -199,7 +203,7 @@ export default function FormInvitado() {
         </div>
       </form>
 
-      <aside className="col-span-12 xl:col-span-5 lg:col-span-12">
+      <aside className="col-span-12 lg:col-span-5">
         <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Resumen</h2>
 

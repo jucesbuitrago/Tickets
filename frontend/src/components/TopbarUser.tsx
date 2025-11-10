@@ -1,9 +1,9 @@
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, LogOut } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 export default function TopbarUser() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   return (
     <div className="flex items-center justify-between">
       <h1 className="text-4xl font-semibold">Hola, {user?.name || 'Usuario'}</h1>
@@ -24,10 +24,11 @@ export default function TopbarUser() {
           />
         </div>
         <button
+          onClick={logout}
           className="p-2 hover:bg-slate-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#D71920]/40"
-          aria-label="Menú"
+          aria-label="Cerrar sesión"
         >
-          <Menu size={20} />
+          <LogOut size={20} />
         </button>
       </div>
     </div>
