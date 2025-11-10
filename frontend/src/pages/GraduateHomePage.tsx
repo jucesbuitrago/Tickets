@@ -1,30 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import InviteCard from '../components/InviteCard';
 import EmptyState from '../components/EmptyState';
 import { Button } from '../components/ui/Button';
-
-const mockInvitados = [
-  { name: 'Sara Vargas', document: 'CC 12345678', seat: 'K11' },
-  { name: 'Samalito Vargas', document: 'CC 87654321', seat: 'K12' },
-];
+import { useAuth } from '../hooks/useAuth';
+import { useApi } from '../hooks/useApi';
+import type { InvitationsResponse, Invitation } from '../types/graduate';
 
 export default function GraduateHomePage() {
-  const hasInvitados = mockInvitados.length > 0;
+  const { user } = useAuth();
+  const { get } = useApi();
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadInvitations = async () => {
+      setIsLoading(true);
+      try {
+        const response = await get<InvitationsResponse>('/graduate/invitations');
+        const invitationsData = (response.data as any)?.data || [];
+        setInvitations(invitationsData);
+      } catch (error) {
+        console.error('Error loading invitations:', error);
+        setInvitations([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (user) {
+      loadInvitations();
+    } else {
+      setIsLoading(false);
+    }
+  }, [user]);
+
+  const hasInvitados = invitations.length > 0;
 
   return (
     <div className="grid grid-cols-12 gap-8">
-      {/* H1 + Topbar (col-span-12) */}
-      <div className="col-span-12">
-        <h1 className="text-4xl font-semibold">Hola, Paula</h1>
-      </div>
 
       {/* Hero (col-span-12) */}
       <div className="col-span-12">
-        <div className="h-56 w-full rounded-2xl overflow-hidden">
+        <div className="h-56 w-full rounded-2xl overflow-hidden bg-gray-200 flex items-center justify-center">
           <img
-            src="/api/placeholder/1200/224"
+            src="/storage/images/campus.jpg"
             alt="Campus Universidad del Tolima"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              const parent = e.currentTarget.parentElement;
+              if (parent) {
+                parent.innerHTML = `
+                  <div class="text-center text-gray-500">
+                    <div class="text-6xl mb-2">🏛️</div>
+                    <p class="text-lg">Campus Universidad del Tolima</p>
+                  </div>
+                `;
+              }
+            }}
           />
         </div>
       </div>
@@ -72,12 +105,12 @@ export default function GraduateHomePage() {
         <h3 className="font-semibold mb-3">Mis Invitados</h3>
         {hasInvitados ? (
           <div className="grid gap-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1">
-            {mockInvitados.map((invitado, index) => (
+            {invitations.slice(0, 6).map((invitation) => (
               <InviteCard
-                key={index}
-                name={invitado.name}
-                document={invitado.document}
-                seat={invitado.seat}
+                key={invitation.id}
+                name={`Invitación ${invitation.id}`}
+                document={`Estado: ${invitation.status}`}
+                seat={invitation.event?.name || `Evento ${invitation.event_id}`}
               />
             ))}
           </div>

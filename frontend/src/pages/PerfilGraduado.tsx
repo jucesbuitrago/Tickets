@@ -1,7 +1,9 @@
 import React from 'react';
 import { Settings, MessageSquare, HelpCircle, Headphones } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 
 export default function PerfilGraduado() {
+  const { user } = useAuth();
   return (
     <div className="grid grid-cols-12 gap-8">
         {/* Header */}
@@ -27,8 +29,24 @@ export default function PerfilGraduado() {
         <div className="col-span-12 xl:col-span-5">
           <div className="rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm p-6">
             <div className="text-center">
-              <div className="w-24 h-24 bg-slate-300 rounded-full mx-auto mb-4"></div>
-              <h2 className="text-xl font-semibold text-slate-900 mb-1">Paula Vargas</h2>
+              <div className="w-24 h-24 bg-slate-300 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center">
+                <img
+                  src={`/storage/images/profile-${user?.id || 'default'}.jpg`}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      const icon = document.createElement('div');
+                      icon.innerHTML = '👤';
+                      icon.className = 'text-2xl';
+                      parent.appendChild(icon);
+                    }
+                  }}
+                />
+              </div>
+              <h2 className="text-xl font-semibold text-slate-900 mb-1">{user?.name || 'Usuario'}</h2>
               <p className="text-slate-600">Próxima graduada</p>
             </div>
           </div>
