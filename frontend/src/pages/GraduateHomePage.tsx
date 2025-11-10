@@ -7,6 +7,7 @@ import { useApi } from '../hooks/useApi';
 import type { InvitationsResponse, Invitation } from '../types/graduate';
 
 export default function GraduateHomePage() {
+  const [imageError, setImageError] = useState(false);
   const { user } = useAuth();
   const { get } = useApi();
   const [invitations, setInvitations] = useState<Invitation[]>([]);
@@ -38,27 +39,21 @@ export default function GraduateHomePage() {
 
   return (
     <div className="grid grid-cols-12 gap-8">
-
-      {/* Hero (col-span-12) */}
       <div className="col-span-12">
         <div className="h-56 w-full rounded-2xl overflow-hidden bg-gray-200 flex items-center justify-center">
-          <img
-            src="/storage/images/campus.jpg"
-            alt="Campus Universidad del Tolima"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              const parent = e.currentTarget.parentElement;
-              if (parent) {
-                parent.innerHTML = `
-                  <div class="text-center text-gray-500">
-                    <div class="text-6xl mb-2">🏛️</div>
-                    <p class="text-lg">Campus Universidad del Tolima</p>
-                  </div>
-                `;
-              }
-            }}
-          />
+          {imageError ? (
+            <div className="text-center text-gray-500">
+              <div className="text-6xl mb-2">🏛️</div>
+              <p className="text-lg">Campus Universidad del Tolima</p>
+            </div>
+          ) : (
+            <img
+              src="/storage/images/campus.jpg"
+              alt="Campus Universidad del Tolima"
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
+            />
+          )}
         </div>
       </div>
 
