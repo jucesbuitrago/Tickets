@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -28,13 +28,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('scan')->post('/scan/validate-qr', [ScanController::class, 'validateQr']);
 
 // Rutas protegidas
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
 
     // Role-based routes
-    Route::middleware('role:ADMIN')->group(function () {
+    Route::middleware('auth:api,role:ADMIN')->group(function () {
         // Admin routes
         Route::post('/admin/import-graduates', [App\Http\Controllers\AdminController::class, 'importGraduates']);
         Route::post('/admin/events', [App\Http\Controllers\AdminController::class, 'createEvent']);
@@ -52,11 +52,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/admin/graduates/{id}', [App\Http\Controllers\AdminController::class, 'deleteGraduate']);
     });
 
-    Route::middleware('role:ADMIN,STAFF')->group(function () {
+    Route::middleware('auth:api,role:ADMIN,STAFF')->group(function () {
         // Admin and Staff routes
     });
 
-    Route::middleware('role:GRADUANDO')->group(function () {
+    Route::middleware('auth:api,role:GRADUANDO')->group(function () {
         // Graduate routes
         Route::get('/graduate/me', [App\Http\Controllers\GraduateController::class, 'me']);
         Route::get('/graduate/invitations', [App\Http\Controllers\GraduateController::class, 'getInvitations']);
