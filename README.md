@@ -7,7 +7,7 @@ Sistema completo para control de acceso a auditorios universitarios con QR firma
 - **Backend**: Laravel 10+ con Clean Architecture
 - **Frontend**: React 18+ + Vite + TypeScript
 - **Base de Datos**: MySQL/PostgreSQL
-- **Cache/Queue**: Redis
+- **Cache/Queue**: File/Database
 - **Autenticación**: JWT con expiración corta
 - **Seguridad**: Firma HMAC-SHA256 con rotación de claves
 
@@ -30,7 +30,6 @@ calidad/
 - **Node.js**: 18+
 - **npm**: 9+
 - **PostgreSQL**: 13+
-- **Redis**: 6+
 - **Git**
 
 ### Instalación Completa
@@ -84,14 +83,12 @@ cp .env.example .env
 
 #### 4. Servicios Externos
 ```bash
-# Iniciar PostgreSQL y Redis
+# Iniciar PostgreSQL
 # Usando Docker (recomendado para desarrollo)
 docker run --name postgres-tickets -e POSTGRES_DB=tickets -e POSTGRES_PASSWORD=your_password -p 5432:5432 -d postgres:13
-docker run --name redis-tickets -p 6379:6379 -d redis:6
 
 # O instalar localmente
 # PostgreSQL: https://www.postgresql.org/download/
-# Redis: https://redis.io/download
 ```
 
 ### Configuración de Variables de Entorno
@@ -107,10 +104,8 @@ DB_USERNAME=postgres
 DB_PASSWORD=your_password
 
 # Cache y Queue
-CACHE_DRIVER=redis
-QUEUE_CONNECTION=redis
-REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
 
 # JWT y Seguridad
 JWT_SECRET=your_jwt_secret_here
@@ -246,7 +241,6 @@ npm run build
 # 3. Reiniciar servicios
 sudo systemctl restart nginx
 sudo systemctl restart php8.2-fpm
-sudo systemctl restart redis-server
 ```
 
 #### Docker Deployment
@@ -295,7 +289,7 @@ php artisan tinker
 DB::select('SELECT version()');
 
 # Verificar cache
-Cache::store('redis')->get('test_key');
+Cache::store('file')->get('test_key');
 
 # Ver logs
 tail -f storage/logs/laravel.log
